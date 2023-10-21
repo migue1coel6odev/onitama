@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./board.styles";
 
 const getCardAvailableCells = ({ cardInfo, whitePlaying }) => {
-  let result = [];
+  let result: any = [];
   const newCardInfo = [...cardInfo];
   if (!whitePlaying) {
     newCardInfo.reverse();
@@ -83,16 +83,16 @@ const TableColumn = ({
               ? styles.clickableCell
               : {}
             : black
-            ? styles.clickableCell
-            : {}
+              ? styles.clickableCell
+              : {}
           : {})
       }}
       onClick={
         actionable
           ? () => onCellClick(row, column, actionable)
           : isToPaint
-          ? () => onMoveAction(row, column)
-          : () => {}
+            ? () => onMoveAction(row, column)
+            : () => { }
       }
     >
       {isToPaint ? (whitePlaying ? black : white) : black || white}
@@ -170,97 +170,86 @@ const TableRow = ({
   );
 };
 
-class Board extends React.Component {
-  render() {
-    const {
-      piecesBlack,
-      piecesWhite,
+const Board = ({
+  piecesBlack,
+  piecesWhite,
+  whitePlaying,
+  hasCardSelected,
+  onCellClick,
+  selectedCell,
+  cardInfo,
+  pieceSelected,
+  onMoveAction
+}: any) => {
+
+  let piecesBlackToUse = [...piecesBlack];
+  let piecesWhiteToUse = [...piecesWhite];
+
+  if (hasCardSelected && selectedCell) {
+    const { newPiecesWhite, newPiecesBlack } = getAvailableMoves({
       whitePlaying,
-      hasCardSelected,
-      onCellClick,
       selectedCell,
       cardInfo,
-      pieceSelected,
-      onMoveAction
-    } = this.props;
-    let piecesBlackToUse = [...piecesBlack];
-    let piecesWhiteToUse = [...piecesWhite];
-
-    if (hasCardSelected && selectedCell) {
-      const { newPiecesWhite, newPiecesBlack } = getAvailableMoves({
-        whitePlaying,
-        selectedCell,
-        cardInfo,
-        piecesBlack,
-        piecesWhite
-      });
-      piecesBlackToUse = newPiecesBlack;
-      piecesWhiteToUse = newPiecesWhite;
-    }
-    return (
-      <div style={styles.board}>
-        <table>
-          <tbody>
-            <TableRow
-              id={1}
-              pieces={[piecesBlackToUse[0], piecesWhiteToUse[0]]}
-              whitePlaying={whitePlaying}
-              hasCardSelected={hasCardSelected}
-              onCellClick={onCellClick}
-              selectedCell={selectedCell}
-              pieceSelected={pieceSelected}
-              cardInfo={cardInfo}
-              onMoveAction={onMoveAction}
-            />
-            <TableRow
-              id={2}
-              pieces={[piecesBlackToUse[1], piecesWhiteToUse[1]]}
-              whitePlaying={whitePlaying}
-              hasCardSelected={hasCardSelected}
-              onCellClick={onCellClick}
-              selectedCell={selectedCell}
-              pieceSelected={pieceSelected}
-              cardInfo={cardInfo}
-              onMoveAction={onMoveAction}
-            />
-            <TableRow
-              id={3}
-              pieces={[piecesBlackToUse[2], piecesWhiteToUse[2]]}
-              whitePlaying={whitePlaying}
-              hasCardSelected={hasCardSelected}
-              onCellClick={onCellClick}
-              selectedCell={selectedCell}
-              pieceSelected={pieceSelected}
-              cardInfo={cardInfo}
-              onMoveAction={onMoveAction}
-            />
-            <TableRow
-              id={4}
-              pieces={[piecesBlackToUse[3], piecesWhiteToUse[3]]}
-              whitePlaying={whitePlaying}
-              hasCardSelected={hasCardSelected}
-              onCellClick={onCellClick}
-              selectedCell={selectedCell}
-              pieceSelected={pieceSelected}
-              cardInfo={cardInfo}
-              onMoveAction={onMoveAction}
-            />
-            <TableRow
-              id={5}
-              pieces={[piecesBlackToUse[4], piecesWhiteToUse[4]]}
-              whitePlaying={whitePlaying}
-              hasCardSelected={hasCardSelected}
-              onCellClick={onCellClick}
-              selectedCell={selectedCell}
-              pieceSelected={pieceSelected}
-              cardInfo={cardInfo}
-              onMoveAction={onMoveAction}
-            />
-          </tbody>
-        </table>
-      </div>
-    );
+      piecesBlack,
+      piecesWhite
+    });
+    piecesBlackToUse = newPiecesBlack;
+    piecesWhiteToUse = newPiecesWhite;
   }
+
+  return (
+    <div style={styles.board}>
+      <table>
+        <tbody>
+          <TableRow
+            id={1}
+            pieces={[piecesBlackToUse[0], piecesWhiteToUse[0]]}
+            whitePlaying={whitePlaying}
+            hasCardSelected={hasCardSelected}
+            onCellClick={onCellClick}
+            selectedCell={selectedCell}
+            onMoveAction={onMoveAction}
+          />
+          <TableRow
+            id={2}
+            pieces={[piecesBlackToUse[1], piecesWhiteToUse[1]]}
+            whitePlaying={whitePlaying}
+            hasCardSelected={hasCardSelected}
+            onCellClick={onCellClick}
+            selectedCell={selectedCell}
+            onMoveAction={onMoveAction}
+          />
+          <TableRow
+            id={3}
+            pieces={[piecesBlackToUse[2], piecesWhiteToUse[2]]}
+            whitePlaying={whitePlaying}
+            hasCardSelected={hasCardSelected}
+            onCellClick={onCellClick}
+            selectedCell={selectedCell}
+            onMoveAction={onMoveAction}
+          />
+          <TableRow
+            id={4}
+            pieces={[piecesBlackToUse[3], piecesWhiteToUse[3]]}
+            whitePlaying={whitePlaying}
+            hasCardSelected={hasCardSelected}
+            onCellClick={onCellClick}
+            selectedCell={selectedCell}
+            onMoveAction={onMoveAction}
+          />
+          <TableRow
+            id={5}
+            pieces={[piecesBlackToUse[4], piecesWhiteToUse[4]]}
+            whitePlaying={whitePlaying}
+            hasCardSelected={hasCardSelected}
+            onCellClick={onCellClick}
+            selectedCell={selectedCell}
+            onMoveAction={onMoveAction}
+          />
+        </tbody>
+      </table>
+    </div>
+  )
 }
 
 export default Board;

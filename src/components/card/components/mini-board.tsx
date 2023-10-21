@@ -1,5 +1,4 @@
 import React from "react";
-
 import styles from "./mini-board.styles";
 
 const TableColumn = ({ move }) => (
@@ -23,23 +22,26 @@ const TableRow = ({ moves }) => {
   );
 };
 
-class MiniBoard extends React.Component {
-  render() {
-    const { cardMoves, rotate } = this.props;
-    return (
-      <div style={{ ...styles.board, ...(rotate ? styles.rotate : {}) }}>
-        <table>
-          <tbody>
-            <TableRow moves={cardMoves[0]} />
-            <TableRow moves={cardMoves[1]} />
-            <TableRow moves={cardMoves[2]} />
-            <TableRow moves={cardMoves[3]} />
-            <TableRow moves={cardMoves[4]} />
-          </tbody>
-        </table>
-      </div>
-    );
-  }
+type MiniBoardProps = {
+  cardMoves: any;
+  rotate: Boolean;
+}
+
+const MiniBoard = ({ cardMoves, rotate }: MiniBoardProps) => {
+
+  return (
+    <div style={{ ...styles.board, ...(rotate ? styles.rotate : {}) }}>
+      <table>
+        <tbody>
+          <TableRow moves={cardMoves[0]} />
+          <TableRow moves={cardMoves[1]} />
+          <TableRow moves={cardMoves[2]} />
+          <TableRow moves={cardMoves[3]} />
+          <TableRow moves={cardMoves[4]} />
+        </tbody>
+      </table>
+    </div>
+  );
 }
 
 export default MiniBoard;

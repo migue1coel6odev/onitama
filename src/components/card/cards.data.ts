@@ -10,4 +10,6 @@ const card5 = [[], [, , , true], [, , "main", , true], [, true], []];
 
 const card6 = [[, , true], [], [, , "main"], [, , true], []];
 
+export type Card = typeof card1;
+
 export default [card1, card2, card3, card4, card5, card6];

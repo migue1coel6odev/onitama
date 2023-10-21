@@ -1,4 +1,6 @@
-import React from "react";
+"use client"
+
+import React, { useCallback, useState } from "react";
 import Board from "../components/board/board";
 import Card from "../components/card/card";
 import Piece from "../components/piece/piece";
@@ -57,53 +59,48 @@ const cleanPaint = (black, white) => {
   };
 };
 
-class Game extends React.Component {
-  constructor(props) {
-    super(props);
-
-    // this.cards = generateRandomCards();
-    this.cards = cards;
-    this.state = {
-      whitePlaying: true,
-      hasCardSelected: false,
-      cardInfo: {},
-      selectedCell: {},
-      blackCards: [cards[0], cards[1]],
-      whiteCards: [cards[2], cards[3]],
-      jokerCard: cards[4],
-      piecesBlack: [
-        [
-          <BlackPawn />,
-          <BlackPawn />,
-          <BlackKing />,
-          <BlackPawn />,
-          <BlackPawn />
-        ],
-        [null, null, null, null, null],
-        [null, null, null, null, null],
-        [null, null, null, null, null],
-        [null, null, null, null, null]
+export default function Game() {
+  const [state, setState] = useState({
+    whitePlaying: true,
+    hasCardSelected: false,
+    cardInfo: {},
+    selectedCell: {},
+    blackCards: [cards[0], cards[1]],
+    whiteCards: [cards[2], cards[3]],
+    jokerCard: cards[4],
+    piecesBlack: [
+      [
+        <BlackPawn />,
+        <BlackPawn />,
+        <BlackKing />,
+        <BlackPawn />,
+        <BlackPawn />
       ],
-      piecesWhite: [
-        [null, null, null, null, null],
-        [null, null, null, null, null],
-        [null, null, null, null, null],
-        [null, null, null, null, null],
-        [
-          <WhitePawn />,
-          <WhitePawn />,
-          <WhiteKing />,
-          <WhitePawn />,
-          <WhitePawn />
-        ]
-      ],
-      whitePiecesGone: [],
-      blackPiecesGone: [],
-      winner: null
-    };
-  }
+      [null, null, null, null, null],
+      [null, null, null, null, null],
+      [null, null, null, null, null],
+      [null, null, null, null, null]
+    ],
+    piecesWhite: [
+      [null, null, null, null, null],
+      [null, null, null, null, null],
+      [null, null, null, null, null],
+      [null, null, null, null, null],
+      [
+        <WhitePawn />,
+        <WhitePawn />,
+        <WhiteKing />,
+        <WhitePawn />,
+        <WhitePawn />
+      ]
+    ],
+    whitePiecesGone: [],
+    blackPiecesGone: [],
+    winner: null
+  });
 
-  onCardSelection = (id, card) => {
+
+  const onCardSelection = useCallback((id, card) => {
     this.setState(() => ({
       hasCardSelected: true,
       cardInfo: {
@@ -111,16 +108,16 @@ class Game extends React.Component {
         card
       }
     }));
-  };
+  });
 
-  onCellClick = (row, column, isPiece) => {
+  const onCellClick = useCallback((row, column, isPiece) => {
     this.setState(() => ({
       pieceSelected: true,
       selectedCell: { row, column }
     }));
-  };
+  });
 
-  onMoveAction = (row, column) => {
+  const onMoveAction = useCallback((row, column) => {
     const {
       piecesBlack,
       piecesWhite,
@@ -178,91 +175,73 @@ class Game extends React.Component {
       jokerCard: newJokerCard,
       whiteCards
     }));
-  };
+  });
 
-  render() {
-    const {
-      piecesBlack,
-      piecesWhite,
-      whitePlaying,
-      hasCardSelected,
-      cardInfo: { id, card },
-      selectedCell,
-      blackPiecesGone,
-      whitePiecesGone,
-      blackCards,
-      whiteCards,
-      jokerCard,
-      winner
-    } = this.state;
+  const { b, w } = cleanPaint(state.piecesBlack, state.piecesWhite);
 
-    const { b, w } = cleanPaint(piecesBlack, piecesWhite);
-
-    return (
-      <div style={styles.wrapper}>
-        {winner && (
-          <div
-            style={styles.winner}
-          >{`${winner.toUpperCase()} WON THE GAME `}</div>
-        )}
-        <div style={styles.cards}>
-          <Card
-            id={1}
-            rotate
-            clickable={!whitePlaying}
-            onClick={this.onCardSelection}
-            selected={id === 1}
-            card={blackCards[0]}
-          />
-          <Card
-            id={2}
-            rotate
-            clickable={!whitePlaying}
-            onClick={this.onCardSelection}
-            selected={id === 2}
-            card={blackCards[1]}
-          />
-        </div>
-        <div style={styles.middleSection}>
-          <Card card={jokerCard} isJoker />
-          <Board
-            whitePlaying={whitePlaying}
-            hasCardSelected={hasCardSelected}
-            piecesBlack={[...b]}
-            piecesWhite={[...w]}
-            onCellClick={this.onCellClick}
-            onMoveAction={this.onMoveAction}
-            selectedCell={selectedCell}
-            cardInfo={card}
-          />
-          <div style={styles.piecesGone}>
-            <div style={styles.whiteGone}>
-              {whitePiecesGone.map(elem => elem)}
-            </div>
-            <div style={styles.blackGone}>
-              {blackPiecesGone.map(elem => elem)}
-            </div>
+  return (
+    <div style={styles.wrapper}>
+      {state.winner && (
+        <div
+          style={styles.winner}
+        >{`${winner.toUpperCase()} WON THE GAME `}</div>
+      )}
+      <div style={styles.cards}>
+        <Card
+          id={1}
+          rotate
+          clickable={!state.whitePlaying}
+          onClick={onCardSelection}
+          selected={state.cardInfo.id === 1}
+          card={state.blackCards[0]}
+        />
+        <Card
+          id={2}
+          rotate
+          clickable={!state.whitePlaying}
+          onClick={onCardSelection}
+          selected={state.cardInfo.id === 2}
+          card={state.blackCards[1]}
+        />
+      </div>
+      <div style={styles.middleSection}>
+        <Card card={state.jokerCard} isJoker />
+        <Board
+          whitePlaying={state.whitePlaying}
+          hasCardSelected={state.hasCardSelected}
+          piecesBlack={[...b]}
+          piecesWhite={[...w]}
+          onCellClick={onCellClick}
+          onMoveAction={onMoveAction}
+          selectedCell={state.selectedCell}
+          cardInfo={state.card}
+        />
+        <div style={styles.piecesGone}>
+          <div style={styles.whiteGone}>
+            {state.whitePiecesGone.map(elem => elem)}
+          </div>
+          <div style={styles.blackGone}>
+            {state.blackPiecesGone.map(elem => elem)}
           </div>
         </div>
-        <div style={styles.cards}>
-          <Card
-            id={3}
-            clickable={whitePlaying}
-            onClick={this.onCardSelection}
-            selected={id === 3}
-            card={whiteCards[0]}
-          />
-          <Card
-            id={4}
-            clickable={whitePlaying}
-            onClick={this.onCardSelection}
-            selected={id === 4}
-            card={whiteCards[1]}
-          />
-        </div>
       </div>
-    );
-  }
-}
+      <div style={styles.cards}>
+        <Card
+          id={3}
+          clickable={state.whitePlaying}
+          onClick={onCardSelection}
+          selected={state.cardInfo.id === 3}
+          card={state.whiteCards[0]}
+        />
+        <Card
+          id={4}
+          clickable={state.whitePlaying}
+          onClick={onCardSelection}
+          selected={state.cardInfo.id === 4}
+          card={state.whiteCards[1]}
+        />
+      </div>
+    </div>
+  );
 
-export default Game;
+}
