@@ -1,7 +1,7 @@
 import { useSpring, animated } from '@react-spring/web'
-import { ElementType, PropsWithChildren, useCallback } from 'react'
+import { ComponentProps, PropsWithChildren, useCallback } from 'react'
 
-type ButtonProps = PropsWithChildren<ElementType<'button'>>
+export type ButtonProps = PropsWithChildren<Omit<ComponentProps<'button'>, 'ref'>>
 
 const Button = (props: ButtonProps) => {
   const [springs, api] = useSpring(
